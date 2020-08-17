@@ -1,0 +1,16 @@
+<div class="card mt-4">
+    <h4 class="card-header">Manter Sistema</h4>
+    <div class="card-body">
+        <form [formGroup]="manterSistemaForm" (ngSubmit)="onSubmit()">
+            
+            <div class="form-group">
+                <label for="email">E-mail de atendimento do sistema</label>
+                <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && msControls.email.errors }" />
+                <div *ngIf="submitted && msControls.email.errors" class="invalid-feedback">
+                    <div *ngIf="msControls.email.errors.required">Username is required</div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
