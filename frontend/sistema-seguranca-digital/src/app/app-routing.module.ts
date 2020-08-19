@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { AuthGuard } from './auth/auth.guard';
-import { LoginComponent } from './pages/login/login.component';
-import { ManterSistemaComponent } from './pages/manter-sistema/manter-sistema.component';
-import { PesquisarSistemaComponent } from './pages/pesquisar-sistema/pesquisar-sistema.component';
+import { LoginComponent } from './auth/login/login.component';
+import { PesquisarSistemaComponent } from './sistema/pesquisar-sistema/pesquisar-sistema.component';
 
 
 const routes: Routes = [

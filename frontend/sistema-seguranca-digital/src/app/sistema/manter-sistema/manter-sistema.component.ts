@@ -15,12 +15,16 @@ export class ManterSistemaComponent implements OnInit {
 
   ngOnInit(): void {
     this.manterSistemaForm = this.formBuilder.group({
-      email: ['', Validators.required]
+      descricao: ['', Validators.required],
+      sigla: ['', Validators.required],
+      email: ['', Validators.required],
+      url: ['', Validators.required]
     });
 
     this.msControls = this.manterSistemaForm.controls;
   }
 
-  onSubmit() {}
+  onSubmit() {
+  }
 
 }
