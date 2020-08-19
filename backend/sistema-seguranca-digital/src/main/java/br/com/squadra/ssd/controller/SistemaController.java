@@ -33,7 +33,7 @@ public class SistemaController {
         DataBuilder<Sistema> dataBuilder = new DataBuilder<>(new Sistema(), parameters);
 
         try {
-            Example<Sistema> sistemaExample = dataBuilder.getExample("url", "id");
+            Example<Sistema> sistemaExample = dataBuilder.getExample("url", "id", "status");
             if (sistemaExample == null)
                 sistemaExample = Example.of(new Sistema());
             Page<Sistema> sistemasPage = repository.findAll(sistemaExample, dataBuilder.getPageRequest());

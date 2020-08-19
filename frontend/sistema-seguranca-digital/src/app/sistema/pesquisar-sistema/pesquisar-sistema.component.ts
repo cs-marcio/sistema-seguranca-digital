@@ -12,7 +12,7 @@ import { DataTableDirective } from 'angular-datatables';
   styleUrls: ['./pesquisar-sistema.component.css']
 })
 export class PesquisarSistemaComponent implements OnInit {
-  @ViewChild(DataTableDirective, {static: false})
+  @ViewChild(DataTableDirective, { static: false })
   datatableElement: DataTableDirective;
   private sistemas: Sistema[];
   dtOptions: DataTables.Settings = {};
@@ -25,13 +25,22 @@ export class PesquisarSistemaComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private sistemaService: SistemaService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
   }
 
   onSubmit() {
+    if (!this.submitted) {
+      this.loading = true;
+      this.search();
+    }
+  }
+
+  search() {
+    this.submitted = true;
+
     this.dtOptions = {
       pagingType: "simple_numbers",
       responsive: true,
@@ -45,40 +54,69 @@ export class PesquisarSistemaComponent implements OnInit {
         url:
           "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese-Brasil.json"
       },
-      ajax: (dataTablesParameters: any, callback) => {
+      ajax: (dataTablesParameters: DataTables.AjaxDataRequest, callback) => {
+        dataTablesParameters.columns.forEach(
+          (column: DataTables.AjaxDataRequestColumn) => {
+            switch (column.data) {
+              case "descricao":
+                if (this.f.descricao.value != "") {
+                  console.log(column.data);
+                  column.search.regex = true;
+                  column.search.value = this.f.descricao.value;
+                }
+                break;
+              case "sigla":
+                if (this.f.sigla.value != "") {
+                  console.log(column.data);
+                  column.search.regex = true;
+                  column.search.value = this.f.sigla.value;
+                }
+                break;
+              case "email":
+                if (this.f.email.value != "") {
+                  console.log(column.data);
+                  column.search.regex = true;
+                  column.search.value = this.f.email.value;
+                }
+                break;
+            }
+          }
+        );
+
         this.sistemaService
           .findListPaginated(dataTablesParameters)
           .subscribe((responseApi: ResponseApi) => {
             const resp: DataTablesResponse = responseApi.data;
             this.sistemas = resp.data;
-            console.log(this.sistemas);
             callback({
               recordsTotal: resp.recordsTotal,
               recordsFiltered: resp.recordsFiltered,
               data: resp.data
             });
+
+            this.loading = false;
           });
       },
       columns: [
         {
           data: "descricao",
-          title: "Descrição",
-          searchable: true
+          title: "Descrição"
         },
         {
           data: "sigla",
-          title: "Sigla",
-          searchable: true
+          title: "Sigla"
         },
         {
           data: "email",
-          title: "E-mail de atendimento",
-          searchable: true
+          title: "E-mail de atendimento"
         },
         {
           data: "url",
-          title: "URL",
-          searchable: false
+          title: "URL"
+        },
+        {
+          data: "status",
+          title: "Status",
         }
       ],
       initComplete: () => {
@@ -87,20 +125,14 @@ export class PesquisarSistemaComponent implements OnInit {
             if (this.sistemas != null && this.sistemas.length <= 50) {
               this.dtOptions.paging = false;
               dtInstance.destroy();
-              //dtInstance.draw();
             }
           }
         );
       }
     };
-    this.submitted = true;
   }
 
-  search(){
-    
-  }
-
-  createForm(){
+  createForm() {
     this.pesquisaSistemaForm = this.formBuilder.group({
       descricao: [''],
       sigla: [''],
@@ -108,7 +140,8 @@ export class PesquisarSistemaComponent implements OnInit {
     });
   }
 
-  clearForm(){
+  clearForm() {
+    this.submitted = false;
     this.createForm();
   }
 

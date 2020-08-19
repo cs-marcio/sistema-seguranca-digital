@@ -18,4 +18,5 @@ public class Sistema {
     private String sigla;
     private String email;
     private String url;
+    private String status;
 }

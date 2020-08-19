@@ -4,4 +4,5 @@ export class Sistema {
     sigla: string;
     email: string;
     url: string;
+    status: string;
 }
