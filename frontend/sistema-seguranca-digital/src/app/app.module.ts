@@ -11,8 +11,9 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './auth/jwt.interceptor';
 import { ErrorInterceptor } from './auth/error.interceptor';
 import { LoginComponent } from './auth/login/login.component';
-import { ManterSistemaComponent } from './sistema/manter-sistema/manter-sistema.component';
-import { PesquisarSistemaComponent } from './sistema/pesquisar-sistema/pesquisar-sistema.component';
+import { ManterSistemaComponent } from './pages/sistema/manter-sistema/manter-sistema.component';
+import { PesquisarSistemaComponent } from './pages/sistema/pesquisar-sistema/pesquisar-sistema.component';
+import { CadastrarSistemaComponent } from './pages/sistema/cadastrar-sistema/cadastrar-sistema.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PesquisarSistemaComponent } from './sistema/pesquisar-sistema/pesquisar
     LoginComponent,
     HomeComponent,
     ManterSistemaComponent,
-    PesquisarSistemaComponent
+    PesquisarSistemaComponent,
+    CadastrarSistemaComponent
   ],
   imports: [
     BrowserModule,

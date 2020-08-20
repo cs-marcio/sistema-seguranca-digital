@@ -19,8 +19,11 @@ export class PesquisarSistemaComponent implements OnInit {
   pesquisaSistemaForm: FormGroup;
   submitted = false;
   error = '';
+  hasError = false;
 
   loading = false;
+
+  records = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,6 +35,7 @@ export class PesquisarSistemaComponent implements OnInit {
   }
 
   onSubmit() {
+    this.hasError = false;
     if (!this.submitted) {
       this.loading = true;
       this.search();
@@ -85,17 +89,26 @@ export class PesquisarSistemaComponent implements OnInit {
 
         this.sistemaService
           .findListPaginated(dataTablesParameters)
-          .subscribe((responseApi: ResponseApi) => {
-            const resp: DataTablesResponse = responseApi.data;
-            this.sistemas = resp.data;
-            callback({
-              recordsTotal: resp.recordsTotal,
-              recordsFiltered: resp.recordsFiltered,
-              data: resp.data
-            });
+          .subscribe(
+            (responseApi: ResponseApi) => {
+              const resp: DataTablesResponse = responseApi.data;
+              this.sistemas = resp.data;
+              callback({
+                recordsTotal: resp.recordsTotal,
+                recordsFiltered: resp.recordsFiltered,
+                data: resp.data
+              });
 
-            this.loading = false;
-          });
+              this.records = resp.recordsFiltered;
+              this.loading = false;
+            },
+            err => {
+              this.loading = false;
+              this.submitted = false;
+              this.hasError = true;              
+              this.error = err['error']['errors'][0];
+            }
+          );
       },
       columns: [
         {
@@ -122,7 +135,7 @@ export class PesquisarSistemaComponent implements OnInit {
       initComplete: () => {
         this.datatableElement.dtInstance.then(
           (dtInstance: DataTables.Api) => {
-            if (this.sistemas != null && this.sistemas.length <= 50) {
+            if(this.sistemas != null && this.records <= 50) {
               this.dtOptions.paging = false;
               dtInstance.destroy();
             }
@@ -136,13 +149,13 @@ export class PesquisarSistemaComponent implements OnInit {
     this.pesquisaSistemaForm = this.formBuilder.group({
       descricao: [''],
       sigla: [''],
-      email: ['']
+      email: ['', Validators.email]
     });
   }
 
   clearForm() {
     this.submitted = false;
-    this.createForm();
+    this.pesquisaSistemaForm.reset();
   }
 
   get f() { return this.pesquisaSistemaForm.controls; }

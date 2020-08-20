@@ -1,0 +1,67 @@
+<div class="card mt-4">
+
+    <div *ngIf="hasError" class="alert alert-danger">
+        Falha ao tentar realizar a pesquisa. Tente novamente.
+    </div>
+
+    <h4 class="card-header">Cadastrar Sistema</h4>
+    <div class="card-body">
+        <form [formGroup]="cadastrarSistemaForm">
+
+            <div class="form-group row">
+                <div class="col">
+                    <label class="w-100 p-1 border-bottom" for="descricao">Descrição</label>
+                </div>
+                <div class="col">
+                    <input class="form-control form-control-sm" type="text" formControlName="descricao" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col">
+                    <label class="w-100 p-1 border-bottom" for="sigla">Sigla</label>
+                </div>
+                <div class="col">
+                    <input class="form-control form-control-sm" type="text" formControlName="sigla" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col">
+                    <label class="w-100 p-1 border-bottom" for="email" required>E-mail de atendimento do sistema</label>
+                </div>
+                <div class="col">
+                    <input class="form-control form-control-sm" type="text" formControlName="email" required />
+                    <div class="invalid-tooltip">
+                        Please choose a unique and valid username.
+                      </div>
+                    <div class="d-flex justify-content-end" *ngIf="f.email.errors">
+                        <small *ngIf="f.email.errors.email" class="form-text text-danger">
+                            E-mail inválido.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col">
+                    <label class="w-100 p-1 border-bottom" for="sigla">URL</label>
+                </div>
+                <div class="col">
+                    <input class="form-control form-control-sm" type="text" formControlName="url" />
+                </div>
+            </div>
+        </form>
+
+        <br>
+
+        <div class="row d-flex justify-content-end">
+            <button [disabled]="!cadastrarSistemaForm.valid" class="m-3 btn btn-light" (click)="onSubmit()">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Salvar
+            </button>
+
+            <button class="m-3 btn btn-light" (click)="clearForm()">Limpar</button>
+        </div>
+    </div>
+</div>
